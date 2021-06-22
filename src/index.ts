@@ -1,12 +1,24 @@
 /**
  * Components
  */
-export { motion, createDomMotionComponent } from "./render/dom/motion"
-export { m } from "./render/dom/motion-minimal"
+import { DOMMotionComponents } from "./render/dom/types"
+import { motion as motionProxy, getMotionFallback } from "./render/dom/motion"
+export { createDomMotionComponent } from "./render/dom/motion"
+import { m as mProxy, getMFallback } from "./render/dom/motion-minimal"
 export { AnimatePresence } from "./components/AnimatePresence"
 export { AnimateSharedLayout } from "./components/AnimateSharedLayout"
 export { MotionConfig } from "./components/MotionConfig"
 export { LazyMotion } from "./components/LazyMotion"
+
+export let motion: typeof motionProxy | DOMMotionComponents = motionProxy
+export const patchMotion = /*@__PURE__*/ () => {
+    motion = getMotionFallback()
+}
+
+export let m: typeof mProxy | DOMMotionComponents = mProxy
+export const patchM = /*@__PURE__*/ () => {
+    m = getMFallback()
+}
 
 /**
  * Features

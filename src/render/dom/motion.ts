@@ -8,6 +8,7 @@ import { drag } from "../../motion/features/drag"
 import { layoutAnimations } from "../../motion/features/layout"
 import { FeatureComponents } from "../../motion/features/types"
 import { createDomVisualElement } from "./create-visual-element"
+import { domTags } from "./dom-tags"
 
 const featureBundle: FeatureComponents = {
     ...animations,
@@ -31,6 +32,14 @@ export const motion = /*@__PURE__*/ createMotionProxy(
             createDomVisualElement
         ) as any
 )
+
+/**
+ * @internal
+ */
+export const getMotionFallback = () =>
+    domTags.reduce((acc, tag: keyof DOMMotionComponents) => {
+        return Object.assign(acc, { [tag]: createDomMotionComponent(tag) })
+    }, {} as DOMMotionComponents)
 
 /**
  * Create a DOM `motion` component with the provided string. This is primarily intended
